@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
 
@@ -98,32 +99,65 @@ class _AnalogClockState extends State<AnalogClock> {
     final customTheme = Theme.of(context).brightness == Brightness.light
         ? Theme.of(context).copyWith(
             // Hour hand.
-            primaryColor: Color(0xFF4285F4),
+            primaryColor: Color(0xFF343334),
             // Minute hand.
-            highlightColor: Color(0xFF8AB4F8),
+            highlightColor: Color(0xFFFF3C3E),
             // Second hand.
-            accentColor: Color(0xFF669DF6),
-            backgroundColor: Color(0xFFD2E3FC),
+            accentColor: Color(0xFFFF3C3E),
+            backgroundColor: Color(0xFFF2F0F2),
           )
         : Theme.of(context).copyWith(
-            primaryColor: Color(0xFFD2E3FC),
-            highlightColor: Color(0xFF4285F4),
-            accentColor: Color(0xFF8AB4F8),
-            backgroundColor: Color(0xFF3C4043),
+            primaryColor: Color(0xFFF2F0F2),
+            highlightColor: Color(0xFFFF3C3E),
+            accentColor: Color(0xFFFF3C3E),
+            backgroundColor: Color(0xFF343334),
           );
 
     final time = DateFormat.Hms().format(DateTime.now());
-    final weatherInfo = DefaultTextStyle(
-      style: TextStyle(color: customTheme.primaryColor),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(_temperature),
-          Text(_temperatureRange),
-          Text(_condition),
-          Text(_location),
-        ],
-      ),
+    final weatherInfo = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          _temperature,
+          style: GoogleFonts.montserrat(
+            textStyle: TextStyle(
+              color: Color(0xFF343334),
+              fontSize: 50,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        Text(
+          _temperatureRange,
+          style: GoogleFonts.montserrat(
+            textStyle: TextStyle(
+              color: Color(0xFF343334).withOpacity(0.75),
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        Text(
+          _condition,
+          style: GoogleFonts.montserrat(
+            textStyle: TextStyle(
+              color: Color(0xFFFF3C40),
+              fontSize: 50,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        Text(
+          _location,
+          style: GoogleFonts.montserrat(
+            textStyle: TextStyle(
+              color: Color(0xFF343334).withOpacity(0.75),
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
     );
 
     return Semantics.fromProperties(
@@ -138,13 +172,13 @@ class _AnalogClockState extends State<AnalogClock> {
             // Example of a hand drawn with [CustomPainter].
             DrawnHand(
               color: customTheme.accentColor,
-              thickness: 4,
+              thickness: 1,
               size: 1,
               angleRadians: _now.second * radiansPerTick,
             ),
             DrawnHand(
               color: customTheme.highlightColor,
-              thickness: 16,
+              thickness: 4,
               size: 0.9,
               angleRadians: _now.minute * radiansPerTick,
             ),

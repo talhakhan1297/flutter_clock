@@ -4,6 +4,7 @@
 
 import 'dart:async';
 
+import 'package:analog_clock/clock_face.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
@@ -36,9 +37,11 @@ class AnalogClock extends StatefulWidget {
 class _AnalogClockState extends State<AnalogClock> {
   var _now = DateTime.now();
   var _temperature = '';
+  var _temperatureUnit = '';
   var _temperatureRange = '';
   var _condition = '';
   var _location = '';
+  var _degreeSign = '';
   Timer _timer;
 
   @override
@@ -68,8 +71,16 @@ class _AnalogClockState extends State<AnalogClock> {
 
   void _updateModel() {
     setState(() {
-      _temperature = widget.model.temperatureString;
-      _temperatureRange = '(${widget.model.low} - ${widget.model.highString})';
+      _temperature = widget.model.temperatureString.split('.')[0];
+      _temperatureUnit = widget.model.temperatureString.substring(
+          widget.model.temperatureString.length - 1,
+          widget.model.temperatureString.length);
+      _degreeSign = widget.model.temperatureString.substring(
+          widget.model.temperatureString.length - 2,
+          widget.model.temperatureString.length - 1);
+      _temperatureRange =
+          '${widget.model.low} - ${widget.model.highString.split('°')[0]}';
+
       _condition = widget.model.weatherString;
       _location = widget.model.location;
     });
@@ -115,47 +126,101 @@ class _AnalogClockState extends State<AnalogClock> {
 
     final time = DateFormat.Hms().format(DateTime.now());
     final weatherInfo = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+              text: _temperature,
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(
+                  color: customTheme.primaryColor,
+                  fontSize: 50,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              children: [
+                TextSpan(
+                  text: _degreeSign,
+                  style: GoogleFonts.montserrat(
+                    textStyle: TextStyle(
+                      color: customTheme.highlightColor,
+                      fontSize: 60,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                TextSpan(
+                  text: _temperatureUnit,
+                  style: GoogleFonts.montserrat(
+                    textStyle: TextStyle(
+                      color: customTheme.primaryColor,
+                      fontSize: 50,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                )
+              ]),
+        ),
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+              text: _temperatureRange,
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(
+                  color: customTheme.primaryColor.withOpacity(0.75),
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              children: [
+                TextSpan(
+                  text: _degreeSign,
+                  style: GoogleFonts.montserrat(
+                    textStyle: TextStyle(
+                      color: customTheme.highlightColor.withOpacity(0.75),
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                TextSpan(
+                  text: _temperatureUnit,
+                  style: GoogleFonts.montserrat(
+                    textStyle: TextStyle(
+                      color: customTheme.primaryColor.withOpacity(0.75),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                )
+              ]),
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.01,
+        ),
         Text(
-          _temperature,
+          _condition[0].toUpperCase() + _condition.substring(1),
           style: GoogleFonts.montserrat(
             textStyle: TextStyle(
-              color: Color(0xFF343334),
+              color: customTheme.highlightColor,
               fontSize: 50,
               fontWeight: FontWeight.w700,
             ),
           ),
+          textAlign: TextAlign.center,
         ),
         Text(
-          _temperatureRange,
+          _location.replaceAll(", ", "\n"),
           style: GoogleFonts.montserrat(
             textStyle: TextStyle(
-              color: Color(0xFF343334).withOpacity(0.75),
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-        Text(
-          _condition,
-          style: GoogleFonts.montserrat(
-            textStyle: TextStyle(
-              color: Color(0xFFFF3C40),
-              fontSize: 50,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        Text(
-          _location,
-          style: GoogleFonts.montserrat(
-            textStyle: TextStyle(
-              color: Color(0xFF343334).withOpacity(0.75),
+              color: customTheme.primaryColor.withOpacity(0.75),
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
           ),
+          textAlign: TextAlign.center,
         ),
       ],
     );
@@ -167,44 +232,69 @@ class _AnalogClockState extends State<AnalogClock> {
       ),
       child: Container(
         color: customTheme.backgroundColor,
-        child: Stack(
-          children: [
-            // Example of a hand drawn with [CustomPainter].
-            DrawnHand(
-              color: customTheme.accentColor,
-              thickness: 1,
-              size: 1,
-              angleRadians: _now.second * radiansPerTick,
-            ),
-            DrawnHand(
-              color: customTheme.highlightColor,
-              thickness: 4,
-              size: 0.9,
-              angleRadians: _now.minute * radiansPerTick,
-            ),
-            // Example of a hand drawn with [Container].
-            ContainerHand(
-              color: Colors.transparent,
-              size: 0.5,
-              angleRadians: _now.hour * radiansPerHour +
-                  (_now.minute / 60) * radiansPerHour,
-              child: Transform.translate(
-                offset: Offset(0.0, -60.0),
-                child: Container(
-                  width: 32,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: customTheme.primaryColor,
+        // alignment: Alignment.center,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            weatherInfo,
+            Container(
+              // color: Colors.red.withOpacity(0.1),
+              height: MediaQuery.of(context).size.width * 0.4,
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  ClockFace(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    color: customTheme.backgroundColor,
                   ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              bottom: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: weatherInfo,
+                  // Example of a hand drawn with [CustomPainter].
+                  DrawnHand(
+                    color: customTheme.accentColor,
+                    thickness: 1,
+                    size: 0.75,
+                    angleRadians: _now.second * radiansPerTick,
+                  ),
+                  DrawnHand(
+                    color: customTheme.highlightColor,
+                    thickness: 2,
+                    size: 0.7,
+                    angleRadians: _now.minute * radiansPerTick,
+                  ),
+                  // Example of a hand drawn with [Container].
+                  ContainerHand(
+                    color: Colors.transparent,
+                    size: 0.5,
+                    angleRadians: _now.hour * radiansPerHour +
+                        (_now.minute / 60) * radiansPerHour,
+                    child: Transform.translate(
+                      offset: Offset(0.0, -40.0),
+                      child: Container(
+                        width: 7,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: customTheme.primaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: customTheme.backgroundColor,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 2,
+                          spreadRadius: 1,
+                          color: customTheme.primaryColor.withOpacity(0.1),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

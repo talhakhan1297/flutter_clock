@@ -48,12 +48,10 @@ class _AnalogClockState extends State<AnalogClock> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
+
     widget.model.addListener(_updateModel);
     // Set the initial values.
+
     _updateTime();
     _updateModel();
   }
@@ -105,9 +103,10 @@ class _AnalogClockState extends State<AnalogClock> {
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.width.toString() + "Width");
-    print(MediaQuery.of(context).size.height.toString() + "Height");
-
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     final customTheme = Theme.of(context).brightness == Brightness.light
         ? Theme.of(context).copyWith(
             // Hour hand.
@@ -225,7 +224,6 @@ class _AnalogClockState extends State<AnalogClock> {
         ),
       ],
     );
-
     return Semantics.fromProperties(
       properties: SemanticsProperties(
         label: 'Analog clock with time $time',
@@ -233,22 +231,20 @@ class _AnalogClockState extends State<AnalogClock> {
       ),
       child: Container(
         color: customTheme.backgroundColor,
-        // alignment: Alignment.center,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             weatherInfo,
             Container(
-              // color: Colors.red.withOpacity(0.1),
-              height: MediaQuery.of(context).size.width * 0.4,
-              width: MediaQuery.of(context).size.width * 0.4,
+              height: MediaQuery.of(context).size.height * 0.65,
+              width: MediaQuery.of(context).size.height * 0.65,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   ClockFace(
                     datetime: _now,
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.height * 0.65,
                     color: customTheme.backgroundColor,
                     tickColor: customTheme.primaryColor,
                     darkTheme: Theme.of(context).brightness == Brightness.dark,
@@ -257,7 +253,7 @@ class _AnalogClockState extends State<AnalogClock> {
                   DrawnHand(
                     color: customTheme.accentColor,
                     thickness: 1,
-                    size: 0.75,
+                    size: 0.8,
                     angleRadians: _now.second * radiansPerTick,
                   ),
                   DrawnHand(
@@ -273,10 +269,10 @@ class _AnalogClockState extends State<AnalogClock> {
                     angleRadians: _now.hour * radiansPerHour +
                         (_now.minute / 60) * radiansPerHour,
                     child: Transform.translate(
-                      offset: Offset(0.0, -40.0),
+                      offset: Offset(0.0, -50.0),
                       child: Container(
                         width: 7,
-                        height: 120,
+                        height: 130,
                         decoration: BoxDecoration(
                           color: customTheme.primaryColor,
                         ),
@@ -284,8 +280,8 @@ class _AnalogClockState extends State<AnalogClock> {
                     ),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.035,
-                    height: MediaQuery.of(context).size.width * 0.035,
+                    width: MediaQuery.of(context).size.height * 0.055,
+                    height: MediaQuery.of(context).size.height * 0.055,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: customTheme.backgroundColor,

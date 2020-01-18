@@ -2,13 +2,24 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:analog_clock/elements/tickers.dart';
 import 'package:flutter/material.dart';
 
 class ClockFace extends StatelessWidget {
-  const ClockFace({Key key, this.color, this.width}) : super(key: key);
+  const ClockFace(
+      {Key key,
+      this.color,
+      this.width,
+      @required this.datetime,
+      @required this.darkTheme,
+      this.tickColor})
+      : super(key: key);
 
   final Color color;
   final double width;
+  final DateTime datetime;
+  final Color tickColor;
+  final bool darkTheme;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +39,11 @@ class ClockFace extends StatelessWidget {
                   color: color,
                   boxShadow: [
                     BoxShadow(
-                        spreadRadius: 2.5,
-                        blurRadius: 30,
-                        color: Colors.white,
+                        spreadRadius: darkTheme ? 0 : 2.5,
+                        blurRadius: darkTheme ? 20 : 30,
+                        color: darkTheme
+                            ? Colors.white.withOpacity(0.1)
+                            : Colors.white,
                         offset: Offset(-10, -10))
                   ],
                 ),
@@ -51,7 +64,9 @@ class ClockFace extends StatelessWidget {
                     BoxShadow(
                       spreadRadius: 1,
                       blurRadius: 30,
-                      color: Colors.black.withOpacity(0.18),
+                      color: darkTheme
+                          ? Colors.black.withOpacity(0.5)
+                          : Colors.black.withOpacity(0.18),
                       offset: Offset(10, 10),
                     ),
                   ],
@@ -65,6 +80,13 @@ class ClockFace extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: color,
+            ),
+          ),
+          Container(
+            width: width - 8,
+            height: width - 8,
+            child: CustomPaint(
+              painter: TickerPainter(datetime: datetime, tickColor: tickColor),
             ),
           ),
         ],

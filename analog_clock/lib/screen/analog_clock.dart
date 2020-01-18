@@ -4,16 +4,16 @@
 
 import 'dart:async';
 
-import 'package:analog_clock/clock_face.dart';
+import 'package:analog_clock/elements/clock_face.dart';
+import 'package:analog_clock/elements/container_hand.dart';
+import 'package:analog_clock/elements/drawn_hand.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
-
-import 'container_hand.dart';
-import 'drawn_hand.dart';
 
 /// Total distance traveled by a second or a minute hand, each second or minute,
 /// respectively.
@@ -43,10 +43,15 @@ class _AnalogClockState extends State<AnalogClock> {
   var _location = '';
   var _degreeSign = '';
   Timer _timer;
+  DateTime dateTime;
 
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     widget.model.addListener(_updateModel);
     // Set the initial values.
     _updateTime();
@@ -100,13 +105,9 @@ class _AnalogClockState extends State<AnalogClock> {
 
   @override
   Widget build(BuildContext context) {
-    // There are many ways to apply themes to your clock. Some are:
-    //  - Inherit the parent Theme (see ClockCustomizer in the
-    //    flutter_clock_helper package).
-    //  - Override the Theme.of(context).colorScheme.
-    //  - Create your own [ThemeData], demonstrated in [AnalogClock].
-    //  - Create a map of [Color]s to custom keys, demonstrated in
-    //    [DigitalClock].
+    print(MediaQuery.of(context).size.width.toString() + "Width");
+    print(MediaQuery.of(context).size.height.toString() + "Height");
+
     final customTheme = Theme.of(context).brightness == Brightness.light
         ? Theme.of(context).copyWith(
             // Hour hand.
@@ -246,8 +247,11 @@ class _AnalogClockState extends State<AnalogClock> {
                 alignment: Alignment.center,
                 children: [
                   ClockFace(
+                    datetime: _now,
                     width: MediaQuery.of(context).size.width * 0.4,
                     color: customTheme.backgroundColor,
+                    tickColor: customTheme.primaryColor,
+                    darkTheme: Theme.of(context).brightness == Brightness.dark,
                   ),
                   // Example of a hand drawn with [CustomPainter].
                   DrawnHand(
@@ -280,8 +284,8 @@ class _AnalogClockState extends State<AnalogClock> {
                     ),
                   ),
                   Container(
-                    width: 20,
-                    height: 20,
+                    width: MediaQuery.of(context).size.width * 0.035,
+                    height: MediaQuery.of(context).size.width * 0.035,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: customTheme.backgroundColor,

@@ -5,8 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Dart",
-            "program": "E:/Work/GitHub Projects/flutter_clock/analog_clock/lib/main.dart",
+            "name": "Flutter",
             "request": "launch",
             "type": "dart"
         }

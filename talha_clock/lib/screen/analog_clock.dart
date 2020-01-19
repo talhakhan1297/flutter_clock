@@ -48,7 +48,6 @@ class _AnalogClockState extends State<AnalogClock> {
   @override
   void initState() {
     super.initState();
-
     widget.model.addListener(_updateModel);
     // Set the initial values.
 
@@ -103,10 +102,6 @@ class _AnalogClockState extends State<AnalogClock> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
     final customTheme = Theme.of(context).brightness == Brightness.light
         ? Theme.of(context).copyWith(
             // Hour hand.

@@ -30,18 +30,6 @@ void main() {
   //
   // Your job is to edit [AnalogClock], or replace it with your own clock
   // widget. (Look in analog_clock.dart for more details!)
-  SystemChrome.setPreferredOrientations(
-    [
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ],
-  ).then(
-    (_) {
-      runApp(
-        ClockCustomizer(
-          (ClockModel model) => AnalogClock(model),
-        ),
-      );
-    },
-  );
+
+  runApp(ClockCustomizer((ClockModel model) => AnalogClock(model)));
 }

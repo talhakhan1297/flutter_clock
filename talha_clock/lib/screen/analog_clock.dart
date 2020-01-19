@@ -11,7 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
 
@@ -50,7 +49,10 @@ class _AnalogClockState extends State<AnalogClock> {
     super.initState();
     widget.model.addListener(_updateModel);
     // Set the initial values.
-
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     _updateTime();
     _updateModel();
   }
@@ -128,32 +130,29 @@ class _AnalogClockState extends State<AnalogClock> {
           textAlign: TextAlign.center,
           text: TextSpan(
               text: _temperature,
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  color: customTheme.primaryColor,
-                  fontSize: 50,
-                  fontWeight: FontWeight.w700,
-                ),
+              style: TextStyle(
+                color: customTheme.primaryColor,
+                fontSize: 50,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'Montserrat',
               ),
               children: [
                 TextSpan(
                   text: _degreeSign,
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      color: customTheme.highlightColor,
-                      fontSize: 60,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  style: TextStyle(
+                    color: customTheme.highlightColor,
+                    fontSize: 60,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Montserrat',
                   ),
                 ),
                 TextSpan(
                   text: _temperatureUnit,
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      color: customTheme.primaryColor,
-                      fontSize: 50,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  style: TextStyle(
+                    color: customTheme.primaryColor,
+                    fontSize: 50,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Montserrat',
                   ),
                 )
               ]),
@@ -162,32 +161,29 @@ class _AnalogClockState extends State<AnalogClock> {
           textAlign: TextAlign.center,
           text: TextSpan(
               text: _temperatureRange,
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  color: customTheme.primaryColor.withOpacity(0.75),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+              style: TextStyle(
+                color: customTheme.primaryColor.withOpacity(0.75),
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Montserrat',
               ),
               children: [
                 TextSpan(
                   text: _degreeSign,
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      color: customTheme.highlightColor.withOpacity(0.75),
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  style: TextStyle(
+                    color: customTheme.highlightColor.withOpacity(0.75),
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Montserrat',
                   ),
                 ),
                 TextSpan(
                   text: _temperatureUnit,
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      color: customTheme.primaryColor.withOpacity(0.75),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  style: TextStyle(
+                    color: customTheme.primaryColor.withOpacity(0.75),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Montserrat',
                   ),
                 )
               ]),
@@ -197,23 +193,21 @@ class _AnalogClockState extends State<AnalogClock> {
         ),
         Text(
           _condition[0].toUpperCase() + _condition.substring(1),
-          style: GoogleFonts.montserrat(
-            textStyle: TextStyle(
-              color: customTheme.highlightColor,
-              fontSize: 50,
-              fontWeight: FontWeight.w700,
-            ),
+          style: TextStyle(
+            color: customTheme.highlightColor,
+            fontSize: 50,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Montserrat',
           ),
           textAlign: TextAlign.center,
         ),
         Text(
           _location.replaceAll(", ", "\n"),
-          style: GoogleFonts.montserrat(
-            textStyle: TextStyle(
-              color: customTheme.primaryColor.withOpacity(0.75),
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
+          style: TextStyle(
+            color: customTheme.primaryColor.withOpacity(0.75),
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'Montserrat',
           ),
           textAlign: TextAlign.center,
         ),

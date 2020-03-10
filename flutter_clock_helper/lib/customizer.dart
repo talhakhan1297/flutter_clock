@@ -177,12 +177,6 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
       child: AspectRatio(
         aspectRatio: 5 / 3,
         child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 2,
-              color: Theme.of(context).unselectedWidgetColor,
-            ),
-          ),
           child: widget._clock(_model),
         ),
       ),
@@ -196,28 +190,26 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
       home: Scaffold(
         resizeToAvoidBottomPadding: false,
         endDrawer: _configDrawer(context),
-        body: SafeArea(
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              setState(() {
-                _configButtonShown = !_configButtonShown;
-              });
-            },
-            child: Stack(
-              children: [
-                clock,
-                if (_configButtonShown)
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Opacity(
-                      opacity: 0.7,
-                      child: _configButton(),
-                    ),
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            setState(() {
+              _configButtonShown = !_configButtonShown;
+            });
+          },
+          child: Stack(
+            children: [
+              clock,
+              if (_configButtonShown)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Opacity(
+                    opacity: 0.7,
+                    child: _configButton(),
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         ),
       ),
